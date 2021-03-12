@@ -53,7 +53,6 @@ def read_shape_file():
     shapefile.drop(shapefile.loc[shapefile["Country"] == "Antarctica"].index, axis = 0, inplace = True)
     return shapefile
 
-
 def get_data_for_map(year, mask):
     data = mask
     data["year"] = year
@@ -140,19 +139,22 @@ if select_display == "Welcome and Introduction":
     st.write("""
     # Welcome to Mathea's General Assembly Capstone Project: \n
     ### Online Sales Data Analysis \n
-    Online sales is a critical revenue stream for any business. And because of it's digital nature, each transaction can be recorded
-    and used to infer insights about a business - it's products, processes and customers. \n
-    In this project, we will completely explore one organizations online transaction's from December 1st, 2009 to December 12th, 2011. The raw data comprised of sales, returns, shipping
+    Online sales is a critical revenue stream for many businesses, and because of its digital nature, each transaction can be recorded
+    and used to infer insights about a business and its products, processes, and customers. \n
+    In this project, we  explore one organization's online transactions from December 1st, 2009 to December 12th, 2011. The raw data comprised of sales, returns, shipping
     fees, banking fees, errors and testing, as well as promotional discounts.
 
-    As with any data science project, the quality and organization of the data presented a significant challenge. With well over a million transactions,
+    As with any data science initiative, the quality and organization of the data presented a significant challenge. With well over a million transactions,
     data wrangling played a large role in being able to derive insights from this dataset.
 
-    After a thorough data cleaning and exploratory analysis, it became clear that there are several ways to analyse the data. A logistic regression model was trained
-    to predict product returns based on customer Id, product stock code, quantity and country of purchase.
-    Also, a Vector Auto Regressor was trained to forcast future sales quantiies and revenue. Furthermore, a recommender system leveraging cosine similarities between customers and their
-    products of choice was developed to indicate products that a customer would probabily be interested in. Finally each customers' likelihood of returning and expected number of purchases
-    in the future was calculated using a Beta Geometric/Negative Binomial distribution model, and compounded with a Gamma-Gamma model to predict lifetime value.
+    After a thorough data cleaning and exploratory analysis, it became clear that there are several ways to analyze the data. A logistic regression model was trained
+    to predict product returns based on Customer ID, product stock code, quantity and country of purchase.
+    Also, a Vector Autoregressor was trained to forcast future sales quantiies and revenue. Furthermore, a recommender system leveraging cosine similarities between customers and their
+    products of choice was developed to recommend products that a customer would probabily be interested in based off their historic purchases. Finally each customers' likelihood of
+    being a repeat customer, and expected number of purchases in the future was calculated using a Beta Geometric/Negative Binomial distribution model, and compounded with a Gamma-Gamma
+    model to predict the lifetime value of each customer.
+
+    
 
     """)
     requirements_expander = st.beta_expander("Requirements")
@@ -196,7 +198,7 @@ if select_display == "Analysis by Country or Product":
         country_scatter = df[df["Country"].isin(country)]
         country_scatter = country_scatter.groupby(["Invoice", "Country"])[["Revenue", "Quantity"]].sum().reset_index()
         fig = px.scatter(country_scatter, y="Revenue", x="Quantity", color = "Country",
-        color_discrete_sequence=px.colors.qualitative.Vivid, width=1000, height=550, title = "Price vs Quantity by Year, Country")
+        color_discrete_sequence=px.colors.qualitative.Vivid, width=850, height=550, title = "Price vs Quantity by Year, Country")
 
         col1.plotly_chart(fig)
 
@@ -287,7 +289,7 @@ if select_display == "Returns Predictor":
     color_bar = ColorBar(color_mapper=color_mapper, label_standoff=8,width = 500, height = 20,
                              border_line_color=None,location = (0,0), orientation = 'horizontal', major_label_overrides = tick_labels)
     hover = HoverTool(tooltips = [ ('Country: ','@Country'),('Number of returns: ', "@was_refunded" )])
-    p = figure(title = 'Returns by Country', plot_height = 580 , plot_width = 950, toolbar_location = None, tools = [hover])
+    p = figure(title = 'Returns by Country', plot_height = 480 , plot_width = 700, toolbar_location = None, tools = [hover])
     p.xgrid.grid_line_color = None
     p.ygrid.grid_line_color = None
     p.axis.visible = False
@@ -315,12 +317,12 @@ if select_display == "Time-Series Analysis":
 
         days =  df.groupby(df.InvoiceDate.dt.day_name())[["Revenue"]].mean()
         fig = px.line(days,  y="Revenue", x = ["Monday", 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        title='Average Revenue by Day', labels={'Revenue': "Revenue ", "x": "Day of the Week "}, template = "plotly_white" )
+        title='Average Revenue by Day', labels={'Revenue': "Revenue ", "x": "Day of the Week "}, template = "plotly_white", width = 530 )
         col1.plotly_chart(fig)
 
         months =  df.groupby(df.InvoiceDate.dt.month_name())[["Revenue"]].mean()
         fig = px.line(months,  y="Revenue", x = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        title='Average Revenue by Month', labels={'Revenue': "Revenue ", "x": "Month "}, template = "plotly_white" )
+        title='Average Revenue by Month', labels={'Revenue': "Revenue ", "x": "Month "}, template = "plotly_white" , width = 570)
         col2.plotly_chart(fig)
         daily_sales = get_sales_per_timeperiod("3D")
         daily_sales.reset_index(inplace = True)
@@ -332,7 +334,7 @@ if select_display == "Time-Series Analysis":
 
         st.write("""### Revenue Over Time""")
         # Generate the top plot.
-        p = figure(plot_height=300, plot_width=1000, tools=["xpan", hover], toolbar_location=None, x_axis_type="datetime", x_axis_location="above",
+        p = figure(plot_height=300, plot_width=950, tools=["xpan", hover], toolbar_location=None, x_axis_type="datetime", x_axis_location="above",
                     background_fill_color="white", x_range=(dates[5], dates[50]))
         p.line('date', 'close', source=source)
 
@@ -340,7 +342,7 @@ if select_display == "Time-Series Analysis":
         p.yaxis.axis_label = 'Price'
         p.yaxis.formatter.use_scientific = False
 
-        select = figure(title="Revenue Over Time", plot_height=130, plot_width=1000, y_range=p.y_range,   #Generate and customize the bottom plot.
+        select = figure(title="Revenue Over Time", plot_height=130, plot_width=930, y_range=p.y_range,   #Generate and customize the bottom plot.
                         x_axis_type="datetime", y_axis_type=None,  toolbar_location=None, background_fill_color="white")
 
         range_rool = RangeTool(x_range=p.x_range)
@@ -415,7 +417,7 @@ if select_display == "Customer Lifetime Value":
     mode = "gauge+number+delta",
     value = rfm.at[rfm[rfm["Customer ID"] == customer_select].index[0],'CLV'],
     number = {'prefix': "$"},
-    domain = {'x': [0, 0.8], 'y': [0, 1]},
+    domain = {'x': [0, 0.75], 'y': [0, 1]},
     title = {'text': f"Lifetime Value of Customer #{customer_select}<br>    ", 'font': {'size': 20, "color": "black"}},
     delta = {'reference': 2.148032e+03, 'increasing': {'color': "RebeccaPurple"}},
     gauge = {
