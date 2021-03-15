@@ -150,11 +150,11 @@ if select_display == "Welcome and Introduction":
     After a thorough data cleaning and exploratory analysis, it became clear that there are several ways to analyze the data. A logistic regression model was trained
     to predict product returns based on Customer ID, product stock code, quantity and country of purchase.
     Also, a Vector Autoregressor was trained to forcast future sales quantiies and revenue. Furthermore, a recommender system leveraging cosine similarities between customers and their
-    products of choice was developed to recommend products that a customer would probabily be interested in based off their historic purchases. Finally each customers' likelihood of
+    products of choice was developed to recommend products that a customer would likely be interested in based off their historic purchases. Finally each customers' likelihood of
     being a repeat customer, and expected number of purchases in the future was calculated using a Beta Geometric/Negative Binomial distribution model, and compounded with a Gamma-Gamma
     model to predict the lifetime value of each customer.
 
-    
+
 
     """)
     requirements_expander = st.beta_expander("Requirements")
@@ -198,7 +198,7 @@ if select_display == "Analysis by Country or Product":
         country_scatter = df[df["Country"].isin(country)]
         country_scatter = country_scatter.groupby(["Invoice", "Country"])[["Revenue", "Quantity"]].sum().reset_index()
         fig = px.scatter(country_scatter, y="Revenue", x="Quantity", color = "Country",
-        color_discrete_sequence=px.colors.qualitative.Vivid, width=850, height=550, title = "Price vs Quantity by Year, Country")
+        color_discrete_sequence=px.colors.qualitative.Vivid, width=1000, height=550, title = "Price vs Quantity by Year, Country")
 
         col1.plotly_chart(fig)
 
