@@ -137,7 +137,7 @@ select_display = st.sidebar.radio("What type of analysis?", ("Welcome and Introd
 
 if select_display == "Welcome and Introduction":
     st.write("""
-    # Welcome to Mathea's General Assembly Capstone Project: \n
+    # Welcome to Mathea's Online Sales Analysis Dashboard: \n
     ### Online Sales Data Analysis \n
     Online sales is a critical revenue stream for many businesses, and because of its digital nature, each transaction can be recorded
     and used to infer insights about a business and its products, processes, and customers. \n
