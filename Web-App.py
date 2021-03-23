@@ -137,11 +137,10 @@ select_display = st.sidebar.radio("What type of analysis?", ("Welcome and Introd
 
 if select_display == "Welcome and Introduction":
     st.write("""
-    # Welcome to Mathea's Online Sales Analysis Dashboard: \n
-    ### Online Sales Data Analysis \n
+    # Welcome to Mathea's Online Sales Analysis Dashboard \n
     Online sales is a critical revenue stream for many businesses, and because of its digital nature, each transaction can be recorded
     and used to infer insights about a business and its products, processes, and customers. \n
-    In this project, we  explore one organization's online transactions from December 1st, 2009 to December 12th, 2011. The raw data comprised of sales, returns, shipping
+    In this dashbaord, we  explore one organization's online transactions from December 1st, 2009 to December 12th, 2011. The raw data comprised of sales, returns, shipping
     fees, banking fees, errors and testing, as well as promotional discounts.
 
     As with any data science initiative, the quality and organization of the data presented a significant challenge. With well over a million transactions,
@@ -153,10 +152,10 @@ if select_display == "Welcome and Introduction":
     products of choice was developed to recommend products that a customer would likely be interested in based off their historic purchases. Finally each customers' likelihood of
     being a repeat customer, and expected number of purchases in the future was calculated using a Beta Geometric/Negative Binomial distribution model, and compounded with a Gamma-Gamma
     model to predict the lifetime value of each customer.
-
-
-
     """)
+
+
+
     requirements_expander = st.beta_expander("Requirements")
     requirements_expander.markdown("""
     * **Python Libraries**
